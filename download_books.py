@@ -2,79 +2,79 @@ import os
 import requests
 
 from bs4 import BeautifulSoup
-from pathvalidate import sanitize_filename
+from pathvalidate import sanitize_filepath
+from urllib.parse import urljoin
+from urllib.parse import urlparse
 
 
-BASE_URL = 'https://tululu.org/'
+def check_for_redirect(response):
+    if response.history:
+        raise requests.HTTPError
 
 
-def fetch_book_id():
-    for book_id in range(1,11):
-        fetch_link_book(book_id, BASE_URL)
-
-
-def fetch_link_book(book_id, BASE_URL):
-    url_book = f'{BASE_URL}b{book_id}'
-    url_txt = f'{BASE_URL}txt.php?id={book_id}'
-    get_link_book(url_txt, book_id, url_book)
-    
-
-def fetch_book_title(url_book, book_id):
-    response = requests.get(url_book)
+def download_txt(url_txt, filename, folder='books/'):
+    os.makedirs(folder, exist_ok=True)
+    response = requests.get(url_txt)
     response.raise_for_status()
+    check_for_redirect(response)
+    filename = sanitize_filepath(f'{filename}.txt')
+    filepath = os.path.join(folder, filename)
+    with open(filepath, 'w')as file:
+        file.write(response.text)
+
+
+def download_image(url_img, folder='images/'):
+    os.makedirs(folder, exist_ok=True)
+    response = requests.get(url_img)
+    filename = urlparse(url_img)[-4].split('/')[-1]
+    filepath = os.path.join(folder, filename)
+    with open(filepath, 'wb')as file:
+        file.write(response.content)
+
+
+def get_title_book(url_book):
+    response = requests.get(url_book)
     soup = BeautifulSoup(response.text, 'lxml')
-    title = soup.find('h1').text.split(':')[0]
+    title = soup.find('h1').text.split('::')[0].strip()
     return title
 
 
-def get_link_book(url_txt, book_id, url_book):
-    response = requests.get(url_txt, allow_redirects=False)
+def get_url_book_img(url_book):
+    response = requests.get(url_book)
     response.raise_for_status()
-    check_for_redirect(response, books_folder, book_id, url_book)
+    check_for_redirect(response)
+    soup = BeautifulSoup(response.text, 'lxml')
+    path_book_img = soup.find('div', class_='bookimage').find('img')['src']
+    url_img = urljoin(f'http://tululu.org', f'{path_book_img}')
+    return url_img
 
 
-
-def dowload_txt(response, books_folder, book_id, url_book):
-    filename = fetch_book_title(url_book, book_id)
-    filepath = f'{books_folder}/{book_id}. {filename}'
-    with open(filepath, 'wb') as file:
-        file.write(response.content)
-
-
-def fetch_link_bookimage(BASE_URL, images_folder):
-    for page_id in range(5,11):
-        response = requests.get(f'{BASE_URL}b{page_id}')
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'lxml')
-        link_bookimage = soup.find('div', class_='bookimage').find('img')['src']
-        dowload_image(link_bookimage, images_folder, page_id, BASE_URL)
-
-
-
-def dowload_image(link_bookimage, images_folder, page_id, BASE_URL):
-    response = requests.get(f'{BASE_URL}{link_bookimage}')
+def pars_comment(url_book):
+    response =  requests.get(url_book)
     response.raise_for_status()
-    save_image(response, images_folder, page_id)
+    check_for_redirect(response)
+    soup = BeautifulSoup(response.text, 'lxml')
+    comment_tags = soup.find_all('div', 'texts')
+    for comment_tag in comment_tags:
+        comments = comment_tag.find_all('span', 'black')
+        for comment in comments:
+            print(comment.get_text())
 
-
-def save_image(response, images_folder, page_id):
-    filename = f'{page_id}'
-    filepath = f'{images_folder}/{filename}'
-    with open(filepath, 'wb') as file:
-        file.write(response.content)
-
-def check_for_redirect(response, books_folder, book_id, url_book):
-    if not response.is_redirect:
+def main():
+    for book_id in range(1, 11):
         try:
-            dowload_txt(response, books_folder, book_id, url_book)
+            url_book = f'http://tululu.org/b{book_id}/'
+            url_img = get_url_book_img(url_book)
+            filename = f'{book_id}. {get_title_book(url_book)}'
+            url_txt = f'http://tululu.org/txt.php?id={book_id}'
+            download_txt(url_txt, filename, folder='books/')
+            download_image(url_img, folder='images/')
+            print(get_title_book(url_book))
+            pars_comment(url_book)
+            print()
         except requests.HTTPError:
-            raise
-
+            continue
+            
 
 if __name__ == '__main__':
-    images_folder = 'images'
-    books_folder = 'books'
-    os.makedirs(images_folder, exist_ok=True)
-    os.makedirs(books_folder, exist_ok=True)
-    fetch_book_id()
-    fetch_link_bookimage(BASE_URL, images_folder)
+    main()
