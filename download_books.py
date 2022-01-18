@@ -1,3 +1,4 @@
+import argparse
 import os
 import requests
 
@@ -56,7 +57,24 @@ def parse_book_page(html_content):
 
 
 def main():
-    for book_id in range(1, 11):
+    parser = argparse.ArgumentParser(
+        description='''Скрипт скачивает книги с сайта 
+                       https://tululu.org в указанном диапозе id'''
+                       )
+    parser.add_argument('start_id',
+                        nargs='?',
+                        default=1,
+                        type=int,
+                        help='Начальный id книги, по умолчанию: 1',
+                        )
+    parser.add_argument('end_id',
+                        nargs='?',
+                        default=10,
+                        type=int,
+                        help='Конечный id книги, поумолчанию: 10'
+                        )
+    args = parser.parse_args()
+    for book_id in range(args.start_id, args.end_id+1):
         try:
             url_book = f'http://tululu.org/b{book_id}/'
             url_txt = f'http://tululu.org/txt.php?id={book_id}'
