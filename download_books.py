@@ -26,62 +26,50 @@ def download_txt(url_txt, filename, folder='books/'):
 def download_image(url_img, folder='images/'):
     os.makedirs(folder, exist_ok=True)
     response = requests.get(url_img)
+    response.raise_for_status()
+    check_for_redirect(response)
     filename = urlparse(url_img)[-4].split('/')[-1]
     filepath = os.path.join(folder, filename)
     with open(filepath, 'wb')as file:
         file.write(response.content)
 
 
-def get_title_book(url_book):
-    response = requests.get(url_book)
-    soup = BeautifulSoup(response.text, 'lxml')
-    title = soup.find('h1').text.split('::')[0].strip()
-    return title
-
-
-def get_url_book_img(url_book):
-    response = requests.get(url_book)
-    response.raise_for_status()
-    check_for_redirect(response)
-    soup = BeautifulSoup(response.text, 'lxml')
-    path_book_img = soup.find('div', class_='bookimage').find('img')['src']
+def parse_book_page(html_content):
+    comment_book = list()
+    title = html_content.find('h1').text.split('::')[0].strip()
+    author = html_content.find('h1').text.split('::')[1].strip()
+    genre = html_content.find('span', 'd_book').find('a')['title'].split('-')[0]
+    path_book_img = html_content.find('div', class_='bookimage').find('img')['src']
     url_img = urljoin(f'http://tululu.org', f'{path_book_img}')
-    return url_img
-
-
-def parse_book_comment(url_book):
-    response =  requests.get(url_book)
-    response.raise_for_status()
-    check_for_redirect(response)
-    soup = BeautifulSoup(response.text, 'lxml')
-    comment_tags = soup.find_all('div', 'texts')
+    comment_tags = html_content.find_all('div', 'texts')
     for comment_tag in comment_tags:
         comments = comment_tag.find_all('span', 'black')
         for comment in comments:
-            print(comment.get_text())
+            comment_book.append(comment.get_text())
+    return {
+        'Название': title,
+        'Автор': author,
+        'Жанр': genre,
+        'Комментарии': comment_book,
+        'Ссылка на картинку': url_img,
+    }
 
-
-def parse_book_genre(url_book):
-    response = requests.get(url_book)
-    response.raise_for_status()
-    check_for_redirect(response)
-    soup = BeautifulSoup(response.text, 'lxml')
-    genre = soup.find('span', 'd_book').find('a')['title'].split('-')[0]
-    return genre
 
 def main():
     for book_id in range(1, 11):
         try:
             url_book = f'http://tululu.org/b{book_id}/'
-            url_img = get_url_book_img(url_book)
-            filename = f'{book_id}. {get_title_book(url_book)}'
             url_txt = f'http://tululu.org/txt.php?id={book_id}'
+            response = requests.get(url_book)
+            response.raise_for_status()
+            check_for_redirect(response)
+            html_content = BeautifulSoup(response.text, 'lxml')
+            page_content = parse_book_page(html_content)
+            title = page_content['Название']
+            url_img = page_content['Ссылка на картинку']
+            filename = f'{book_id}. {title}'
             download_txt(url_txt, filename, folder='books/')
             download_image(url_img, folder='images/')
-            print(get_title_book(url_book))
-            print(parse_book_genre(url_book))
-            parse_book_comment(url_book)
-            print()
         except requests.HTTPError:
             continue
             
