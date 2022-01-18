@@ -58,7 +58,7 @@ def parse_book_page(html_content):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='''Скрипт скачивает книги с сайта 
+        description='''Скрипт скачивает книги с сайта
                        https://tululu.org в указанном диапозе id'''
                        )
     parser.add_argument('start_id',
@@ -90,7 +90,7 @@ def main():
             download_image(url_img, folder='images/')
         except requests.HTTPError:
             continue
-            
+
 
 if __name__ == '__main__':
     main()
