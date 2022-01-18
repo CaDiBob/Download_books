@@ -49,7 +49,7 @@ def get_url_book_img(url_book):
     return url_img
 
 
-def pars_comment(url_book):
+def parse_book_comment(url_book):
     response =  requests.get(url_book)
     response.raise_for_status()
     check_for_redirect(response)
@@ -59,6 +59,15 @@ def pars_comment(url_book):
         comments = comment_tag.find_all('span', 'black')
         for comment in comments:
             print(comment.get_text())
+
+
+def parse_book_genre(url_book):
+    response = requests.get(url_book)
+    response.raise_for_status()
+    check_for_redirect(response)
+    soup = BeautifulSoup(response.text, 'lxml')
+    genre = soup.find('span', 'd_book').find('a')['title'].split('-')[0]
+    return genre
 
 def main():
     for book_id in range(1, 11):
@@ -70,7 +79,8 @@ def main():
             download_txt(url_txt, filename, folder='books/')
             download_image(url_img, folder='images/')
             print(get_title_book(url_book))
-            pars_comment(url_book)
+            print(parse_book_genre(url_book))
+            parse_book_comment(url_book)
             print()
         except requests.HTTPError:
             continue
