@@ -36,7 +36,7 @@ def download_image(url_img, folder='images/'):
 
 
 def parse_book_page(html_content):
-    comment_book = list()
+    comments_book = list()
     title = html_content.find('h1').text.split('::')[0].strip()
     author = html_content.find('h1').text.split('::')[1].strip()
     genre = html_content.find('span', 'd_book').find('a')['title'].split('-')[0]
@@ -46,12 +46,12 @@ def parse_book_page(html_content):
     for comment_tag in comment_tags:
         comments = comment_tag.find_all('span', 'black')
         for comment in comments:
-            comment_book.append(comment.get_text())
+            comments_book.append(comment.get_text())
     return {
         'Название': title,
         'Автор': author,
         'Жанр': genre,
-        'Комментарии': comment_book,
+        'Комментарии': comments_book,
         'Ссылка на картинку': url_img,
     }
 
