@@ -17,7 +17,7 @@
 ##### Пример запуска:
 
 ```bash
-$ python download_books.py 50 60
+python download_books.py 50 60
 ```
 Создаст две папки `books` и `images` в корне скрипта, скачает книги с `id` от 50 до 60 в папку `books` и картинки к ним в папку `images`.
 
@@ -28,7 +28,7 @@ Python3 должен быть уже установлен. 
 Затем используйте `pip` или `pip3` для установки зависимостей:
 
 ```bash
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### Цель проекта
