@@ -35,14 +35,14 @@ def download_image(url_img, folder='images/'):
         file.write(response.content)
 
 
-def parse_book_page(html_content):
+def parse_book_page(soup):
     comments_book = list()
-    title = html_content.find('h1').text.split('::')[0].strip()
-    author = html_content.find('h1').text.split('::')[1].strip()
-    genre = html_content.find('span', 'd_book').find('a')['title'].split('-')[0]
-    path_book_img = html_content.find('div', class_='bookimage').find('img')['src']
+    title = soup.find('h1').text.split('::')[0].strip()
+    author = soup.find('h1').text.split('::')[1].strip()
+    genre = soup.find('span', 'd_book').find('a')['title'].split('-')[0]
+    path_book_img = soup.find('div', class_='bookimage').find('img')['src']
     url_img = urljoin(f'http://tululu.org', f'{path_book_img}')
-    comment_tags = html_content.find_all('div', 'texts')
+    comment_tags = soup.find_all('div', 'texts')
     for comment_tag in comment_tags:
         comments = comment_tag.find_all('span', 'black')
         for comment in comments:
@@ -82,8 +82,8 @@ def main():
             response = requests.get(book_url)
             response.raise_for_status()
             check_for_redirect(response)
-            html_content = BeautifulSoup(response.text, 'lxml')
-            page_content = parse_book_page(html_content)
+            soup = BeautifulSoup(response.text, 'lxml')
+            page_content = parse_book_page(soup)
             title = page_content['Название']
             url_img = page_content['Ссылка на картинку']
             filename = f'{book_id}. {title}'
