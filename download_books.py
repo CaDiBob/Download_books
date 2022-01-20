@@ -13,9 +13,9 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def download_txt(url_txt, filename, folder='books/'):
+def download_txt(book_txt_url, filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
-    response = requests.get(url_txt)
+    response = requests.get(book_txt_url)
     response.raise_for_status()
     check_for_redirect(response)
     filename = sanitize_filepath(f'{filename}.txt')
@@ -74,11 +74,12 @@ def main():
                         help='Конечный id книги, поумолчанию: 10'
                         )
     args = parser.parse_args()
+
     for book_id in range(args.start_id, args.end_id+1):
         try:
-            url_book = f'http://tululu.org/b{book_id}/'
-            url_txt = f'http://tululu.org/txt.php?id={book_id}'
-            response = requests.get(url_book)
+            book_url = f'http://tululu.org/b{book_id}/'
+            book_txt_url = f'http://tululu.org/txt.php?id={book_id}'
+            response = requests.get(book_url)
             response.raise_for_status()
             check_for_redirect(response)
             html_content = BeautifulSoup(response.text, 'lxml')
@@ -86,7 +87,7 @@ def main():
             title = page_content['Название']
             url_img = page_content['Ссылка на картинку']
             filename = f'{book_id}. {title}'
-            download_txt(url_txt, filename, folder='books/')
+            download_txt(book_txt_url, filename, folder='books/')
             download_image(url_img, folder='images/')
         except requests.HTTPError:
             continue
