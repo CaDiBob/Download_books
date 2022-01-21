@@ -1,9 +1,12 @@
 import argparse
 import os
 import requests
+import textwrap
 
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filepath
+from tqdm import trange
+from time import sleep
 from urllib.parse import urljoin
 from urllib.parse import urlparse
 
@@ -13,13 +16,15 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def download_txt(book_txt_url, filename, folder='books/'):
+def download_txt(book_txt_url, params, txt_filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
-    response = requests.get(book_txt_url)
+    response = requests.get(book_txt_url,
+                            params=params,
+                            )
     response.raise_for_status()
     check_for_redirect(response)
-    filename = sanitize_filepath(f'{filename}.txt')
-    filepath = os.path.join(folder, filename)
+    txt_filename = sanitize_filepath(f'{txt_filename}.txt')
+    filepath = os.path.join(folder, txt_filename)
     with open(filepath, 'w')as file:
         file.write(response.text)
 
@@ -29,29 +34,28 @@ def download_image(url_img, folder='images/'):
     response = requests.get(url_img)
     response.raise_for_status()
     check_for_redirect(response)
-    filename = urlparse(url_img)[-4].split('/')[-1]
-    filepath = os.path.join(folder, filename)
+    raw_img_path = urlparse(url_img)
+    img_filename = os.path.basename(raw_img_path.path)
+    filepath = os.path.join(folder, img_filename)
     with open(filepath, 'wb')as file:
         file.write(response.content)
 
 
 def parse_book_page(soup):
-    comments_book = list()
-    title = soup.find('h1').text.split('::')[0].strip()
-    author = soup.find('h1').text.split('::')[1].strip()
-    genre = soup.find('span', 'd_book').find('a')['title'].split('-')[0]
-    path_book_img = soup.find('div', class_='bookimage').find('img')['src']
+    title, author = soup.find('h1').text.split('::')
+    title = textwrap.shorten(title.strip(), width=100)
+    author = author.strip()
+    raw_genres = soup.select_one('span.d_book').select('a')
+    genres = [genre.text for genre in raw_genres]
+    path_book_img = soup.select_one('.bookimage img')['src']
     url_img = urljoin(f'http://tululu.org', f'{path_book_img}')
-    comment_tags = soup.find_all('div', 'texts')
-    for comment_tag in comment_tags:
-        comments = comment_tag.find_all('span', 'black')
-        for comment in comments:
-            comments_book.append(comment.get_text())
+    raw_comments = soup.select('.texts>.black')
+    book_comments = [comments.text for comments in raw_comments]
     return {
         'Название': title,
         'Автор': author,
-        'Жанр': genre,
-        'Комментарии': comments_book,
+        'Жанр': genres,
+        'Комментарии': book_comments,
         'Ссылка на картинку': url_img,
     }
 
@@ -74,20 +78,21 @@ def main():
                         help='Конечный id книги, поумолчанию: 10'
                         )
     args = parser.parse_args()
-
-    for book_id in range(args.start_id, args.end_id+1):
+    for book_id in trange(args.start_id, args.end_id+1):
         try:
-            book_url = f'http://tululu.org/b{book_id}/'
-            book_txt_url = f'http://tululu.org/txt.php?id={book_id}'
+            sleep(0.01)
+            params = {'id': book_id}
+            book_url = f'https://tululu.org/b{book_id}/'
+            book_txt_url = 'https://tululu.org/txt.php'
             response = requests.get(book_url)
             response.raise_for_status()
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'lxml')
             page_content = parse_book_page(soup)
-            title = page_content['Название']
-            url_img = page_content['Ссылка на картинку']
-            filename = f'{book_id}. {title}'
-            download_txt(book_txt_url, filename, folder='books/')
+            title = page_content.get('Название')
+            url_img = page_content.get('Ссылка на картинку')
+            txt_filename = f'{book_id}. {title}'
+            download_txt(book_txt_url, params, txt_filename, folder='books/')
             download_image(url_img, folder='images/')
         except requests.HTTPError:
             continue
