@@ -29,12 +29,12 @@ def download_txt(book_txt_url, params, txt_filename, folder='books/'):
         file.write(response.text)
 
 
-def download_image(url_img, folder='images/'):
+def download_image(img_url, folder='images/'):
     os.makedirs(folder, exist_ok=True)
-    response = requests.get(url_img)
+    response = requests.get(img_url)
     response.raise_for_status()
     check_for_redirect(response)
-    raw_img_path = urlparse(url_img)
+    raw_img_path = urlparse(img_url)
     img_filename = os.path.basename(raw_img_path.path)
     filepath = os.path.join(folder, img_filename)
     with open(filepath, 'wb')as file:
@@ -48,7 +48,7 @@ def parse_book_page(soup):
     raw_genres = soup.select_one('span.d_book').select('a')
     genres = [genre.text for genre in raw_genres]
     path_book_img = soup.select_one('.bookimage img')['src']
-    url_img = urljoin(f'http://tululu.org', f'{path_book_img}')
+    img_url = urljoin(f'http://tululu.org', f'{path_book_img}')
     raw_comments = soup.select('.texts>.black')
     book_comments = [comments.text for comments in raw_comments]
     return {
@@ -56,7 +56,7 @@ def parse_book_page(soup):
         'Автор': author,
         'Жанр': genres,
         'Комментарии': book_comments,
-        'Ссылка на картинку': url_img,
+        'Ссылка на картинку': img_url,
     }
 
 
@@ -90,10 +90,10 @@ def main():
             soup = BeautifulSoup(response.text, 'lxml')
             page_content = parse_book_page(soup)
             title = page_content.get('Название')
-            url_img = page_content.get('Ссылка на картинку')
+            img_url = page_content.get('Ссылка на картинку')
             txt_filename = f'{book_id}. {title}'
             download_txt(book_txt_url, params, txt_filename, folder='books/')
-            download_image(url_img, folder='images/')
+            download_image(img_url, folder='images/')
         except requests.HTTPError:
             continue
 
