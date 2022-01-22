@@ -48,7 +48,7 @@ def parse_book_page(soup):
     raw_genres = soup.select_one('span.d_book').select('a')
     genres = [genre.text for genre in raw_genres]
     path_book_img = soup.select_one('.bookimage img')['src']
-    img_url = urljoin(f'http://tululu.org', f'{path_book_img}')
+    img_url = urljoin('http://tululu.org', path_book_img)
     raw_comments = soup.select('.texts>.black')
     book_comments = [comments.text for comments in raw_comments]
     return {
@@ -80,7 +80,6 @@ def main():
     args = parser.parse_args()
     for book_id in trange(args.start_id, args.end_id+1):
         try:
-            sleep(0.01)
             params = {'id': book_id}
             book_url = f'https://tululu.org/b{book_id}/'
             book_txt_url = 'https://tululu.org/txt.php'
