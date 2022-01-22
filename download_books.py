@@ -42,7 +42,7 @@ def download_image(img_url, folder='images/'):
 
 
 def parse_book_page(soup):
-    title, author = soup.find('h1').text.split('::')
+    title, author = soup.select_one('h1').text.split('::')
     title = textwrap.shorten(title.strip(), width=100)
     author = author.strip()
     raw_genres = soup.select_one('span.d_book').select('a')
