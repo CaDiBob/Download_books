@@ -47,7 +47,7 @@ python parse_tululu_category.py --start_page 1 --end_page 2
 ```
 Также принимает дополнительные аргументы
 
-#### Примеры
+#### Примеры:
 
 Пропускает загрузку книг
 ```
@@ -69,6 +69,7 @@ python parse_tululu_category.py --dest_folder /home/user
 python parse_tululu_category.py --json_path /home/user
 ```
 **Все аргументы не обязательны если не указывать скачает все книги с 1 по 700 страницу**
+
 
 
 ## Скрипт `download_books.py`.
