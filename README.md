@@ -68,7 +68,7 @@ python parse_tululu_category.py --dest_folder /home/user
 ```
 python parse_tululu_category.py --json_path /home/user
 ```
-**Все аргументы не обязательны если не указывать скачает все книги с 1 по 700 страницу**
+**Все аргументы не обязательны если не указывать скачает все книги жанра ["Научная фантастика"](http://tululu.org/l55/) с 1 по 700 страницу**
 
 
 
