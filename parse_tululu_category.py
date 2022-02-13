@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 
 def add_argument_parser():
     parser = argparse.ArgumentParser(
-        description='''Скрипт скачивает книги жанра "научная фантастика" 
+        description='''Скрипт скачивает книги жанра "научная фантастика"
         с сайта https://tululu.org в указанном диапозе страниц'''
     )
     parser.add_argument(
