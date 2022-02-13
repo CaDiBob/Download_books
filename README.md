@@ -47,13 +47,25 @@ python parse_tululu_category.py --start_page 1 --end_page 2
 Также принимает дополнительные аргументы
 ##### Примеры
 
-`python parse_tululu_category.py --skip_txt` пропускает загрузку книг
+Пропускает загрузку книг
+```
+python parse_tululu_category.py --skip_txt
+```
 
-`python parse_tululu_category.py --skip_imgs` пропускает загрузку картинок
+Пропускает загрузку картинок
+```
+python parse_tululu_category.py --skip_imgs
+```
 
-`python parse_tululu_category.py --dest_folder /home/user` принимает пользовательский путь для книг, картинок и файла с данными(формат .json)
+Принимает пользовательский путь для книг, картинок и файла с данными(формат .json)
+```
+python parse_tululu_category.py --dest_folder /home/user
+```
 
-`python parse_tululu_category.py --json_path /home/user` принимает пользовательский путь для файла с данными(формат .json)
+Принимает пользовательский путь для файла с данными(формат .json)
+```
+python parse_tululu_category.py --json_path /home/user
+```
 
 
 
