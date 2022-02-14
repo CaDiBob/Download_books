@@ -92,8 +92,8 @@ def parse_book_page(soup):
     genres = [genre.text for genre in raw_genres]
     img_tag_url = soup.select_one('.bookimage img')['src']
     img_url = urljoin('http://tululu.org', img_tag_url)
-    book_tag_url = soup.select_one('[href^="/txt.php?id="]')['href']
-    book_url = urljoin('http://tululu.org', book_tag_url)
+    txt_tag_url = soup.select_one('[href^="/txt.php?id="]')['href']
+    txt_url = urljoin('http://tululu.org', txt_tag_url)
     raw_comments = soup.select('.texts>.black')
     book_comments = [comments.text for comments in raw_comments]
     return {
@@ -102,28 +102,29 @@ def parse_book_page(soup):
         'genres': genres,
         'comments': book_comments,
         'img_url': img_url,
-        'txt_url': book_url,
+        'txt_url': txt_url,
     }
 
 
 def is_json(items, json_filepath):
-    if os.path.exists(f'{json_filepath}/book_items.json'):
-        return add_to_json(items, json_filepath, filename='book_items.json')
+    json_filepath = os.path.join(json_filepath, 'book_items.json')
+    if os.path.exists(json_filepath):
+        return add_to_json(items, json_filepath)
     else:
-        return save_to_json(items, json_filepath, filename='book_items.json')
+        return save_to_json(items, json_filepath)
 
 
-def add_to_json(items, json_filepath, filename):
-    with open(f'{json_filepath}/{filename}', 'r+') as file:
+def add_to_json(items, json_filepath):
+    with open(json_filepath, 'r+') as file:
         content = json.load(file)
         content.append(items)
         file.seek(0)
         json.dump(content, file, indent=4, ensure_ascii=False)
 
 
-def save_to_json(items, json_filepath, filename):
+def save_to_json(items, json_filepath):
     book_items = [items]
-    with open(f'{json_filepath}/{filename}', 'w') as file:
+    with open(json_filepath, 'w') as file:
         json.dump(book_items, file, indent=4, ensure_ascii=False)
 
 
@@ -133,7 +134,6 @@ def get_page(start, end):
         url = f'http://tululu.org/l55/{page}'
         response = requests.get(url)
         response.raise_for_status()
-        check_for_redirect(response)
         page_soup = BeautifulSoup(response.text, 'lxml')
         page_tags = page_soup.select('.d_book')
         pages.extend(get_urk_book(page_tags))
@@ -143,9 +143,8 @@ def get_page(start, end):
 def get_urk_book(page_tags):
     urls = list()
     for tag in page_tags:
-        path_url = tag.select_one('a')['href']
-        path_book = path_url.split('/b')
-        book_url = urljoin('http://tululu.org', path_url)
+        path_book_url = tag.select_one('a')['href']
+        book_url = urljoin('http://tululu.org', path_book_url)
         urls.append(book_url)
     return urls
 
@@ -161,12 +160,12 @@ def main():
     end = args.end_page
     urls = get_page(start, end)
     if folder:
-        txt_filepath = f'{folder}/books/'
-        img_filepath = f'{folder}/images/'
+        txt_filepath = os.path.join(folder, 'books')
+        img_filepath = os.path.join(folder, 'images')
         json_filepath = folder
     else:
-        txt_filepath = 'books/'
-        img_filepath = 'images/'
+        txt_filepath = 'books'
+        img_filepath = 'images'
         json_filepath = os.getcwd()
     if json_path:
         json_filepath = json_path
@@ -185,11 +184,10 @@ def main():
             if not skip_imgs:
                 download_image(img_url, img_filename, img_filepath)
             book_items.update(
-                book_path=f'{txt_filepath}/{txt_filename}',
-                img_src=f'{img_filepath}/{img_filename}',
+                book_path=os.path.join(txt_filepath, txt_filename),
+                img_src=os.path.join(img_filepath, img_filename),
             )
             is_json(book_items, json_filepath)
-            exit()
         except requests.HTTPError:
             continue
         except TypeError:
