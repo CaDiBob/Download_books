@@ -63,8 +63,8 @@ def parse_book_page(soup):
 def main():
     parser = argparse.ArgumentParser(
         description='''Скрипт скачивает книги с сайта
-                       https://tululu.org в указанном диапозе id'''
-                       )
+        https://tululu.org в указанном диапозе id'''
+        )
     parser.add_argument('start_id',
                         nargs='?',
                         default=1,
