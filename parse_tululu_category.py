@@ -11,7 +11,7 @@ from urllib.parse import urljoin
 from urllib.parse import urlparse
 
 
-def add_argument_parser():
+def get_argument_parser():
     parser = argparse.ArgumentParser(
         description='''Скрипт скачивает книги жанра "научная фантастика"
         с сайта https://tululu.org в указанном диапозе страниц'''
@@ -128,7 +128,7 @@ def save_to_json(items, json_filepath):
         json.dump(book_items, file, indent=4, ensure_ascii=False)
 
 
-def get_page(start, end):
+def get_pages(start, end):
     pages = list()
     for page in range(start, end):
         url = f'http://tululu.org/l55/{page}'
@@ -136,11 +136,11 @@ def get_page(start, end):
         response.raise_for_status()
         page_soup = BeautifulSoup(response.text, 'lxml')
         page_tags = page_soup.select('.d_book')
-        pages.extend(get_urk_book(page_tags))
+        pages.extend(get_book_urls(page_tags))
     return pages
 
 
-def get_urk_book(page_tags):
+def get_book_urls(page_tags):
     urls = list()
     for tag in page_tags:
         path_book_url = tag.select_one('a')['href']
@@ -150,7 +150,7 @@ def get_urk_book(page_tags):
 
 
 def main():
-    parser = add_argument_parser()
+    parser = get_argument_parser()
     args = parser.parse_args()
     skip_imgs = args.skip_imgs
     skip_txt = args.skip_txt
@@ -158,7 +158,7 @@ def main():
     folder = args.dest_folder
     start = args.start_page
     end = args.end_page
-    urls = get_page(start, end)
+    urls = get_pages(start, end)
     if folder:
         txt_filepath = os.path.join(folder, 'books')
         img_filepath = os.path.join(folder, 'images')
