@@ -76,11 +76,11 @@ def get_urls(start, end):
         response.raise_for_status()
         page_soup = BeautifulSoup(response.text, 'lxml')
         page_tags = page_soup.select('.d_book')
-        urls.extend(get_urk_book(page_tags))
+        urls.extend(get_book_url(page_tags))
     return urls
 
 
-def get_urk_book(page_tags):
+def get_book_url(page_tags):
     urls = list()
     for tag in page_tags:
         path_book_url = tag.select_one('a')['href']
