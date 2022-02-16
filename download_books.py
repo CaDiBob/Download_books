@@ -54,8 +54,6 @@ def main():
             download_image(img_url, img_filename, img_filepath)
         except requests.HTTPError:
             continue
-        except TypeError:
-            continue
 
 
 if __name__ == '__main__':
