@@ -40,8 +40,8 @@ python parse_tululu_category.py --start_page 1 --end_page 2
         ],
         "img_url": "http://tululu.org/shots/239.jpg",
         "txt_url": "http://tululu.org/txt.php?id=239",
-        "book_path": "/home/user//books//Алиби.txt",
-        "img_src": "/home/user//images//239.jpg"
+        "book_path": "/home/user/books/Алиби.txt",
+        "img_src": "/home/user/images/239.jpg"
     }
 ]
 ```
