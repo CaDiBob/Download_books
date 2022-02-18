@@ -10,45 +10,45 @@
     <div class="container">
       <div class="row">
         <div class="col">
-      {% for item_1 in items_1 %}
+      {% for item_1 in itms_1 %}
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="{{item_1.img_src}}" class="card-img" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
+                <img src="/{{item_1.img_src}}" class="card-img" alt="...">
+                  </div>
+                    <div class="col-md-8">
+                  <div class="card-body">
                   <h5 class="card-title">{{item_1.title}}</h5>
                   <p class = "card-text">{{item_1.author}}</p>
-                  <a target="_blank" href="{{item_1.book_path}}">Читать</a>
+                  <a target="_blank" href="/{{item_1.book_path}}">Читать</a>
                   <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                   <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
               </div>
             </div>
-          </div>
-      {% endfor %}    
+          </div> 
+      {% endfor %} 
         </div>
         <div class="col">
-      {% for item_2 in items_2 %}
+      {% for item_2 in itms_2 %}
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="{{item_2.img_src}}" class="card-img" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
+                <img src="/{{item_2.img_src}}" class="card-img" alt="...">
+                  </div>
+                    <div class="col-md-8">
+                  <div class="card-body">
                   <h5 class="card-title">{{item_2.title}}</h5>
                   <p class = "card-text">{{item_2.author}}</p>
-                  <a href="{{item_2.book_path}}">Читать</a>
+                  <a target="_blank" href="/{{item_2.book_path}}">Читать</a>
                   <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                   <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
               </div>
             </div>
           </div>
-      {% endfor %} 
-        </div> 
+      {% endfor %}
+        </div>    
         <div class="w-100"></div>
       </div>
     </div>
