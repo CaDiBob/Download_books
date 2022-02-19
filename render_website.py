@@ -19,9 +19,12 @@ def on_reload():
     items_1, items_2 = distribute(2, book_items)
     items_1 = list(chunked(items_1, 20))
     items_2 = list(chunked(items_2, 20))
+
     for number, items in enumerate(zip(items_1, items_2), 1):
         itms_1, itms_2 = items
         rendered_page = template.render(
+            number_pages=len(items_1),
+            current_page=number,
             itms_1=itms_1,
             itms_2=itms_2,
         )
