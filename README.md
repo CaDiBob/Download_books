@@ -123,6 +123,15 @@ python render_website.py --json_path /home/user
 ```bash
 python render_website.py
 ```
+Запускает локальный сервер:
+
+```
+(user@learnpc:~/Python$ python render_website.py
+[I 220219 22:00:59 server:335] Serving on http://127.0.0.1:5500
+[I 220219 22:00:59 handlers:62] Start watching changes
+[I 220219 22:00:59 handlers:64] Start detecting changes
+
+```
 
 ### Как установить
 
