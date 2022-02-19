@@ -4,8 +4,8 @@
     <title>Страница №{{current_page}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="/static/favicon.ico" type="image/png">
-    <link rel="stylesheet" href="/static/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="icon" href="../static/favicon.ico" type="image/png">
+    <link rel="stylesheet" href="../static/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
     <div class="mx-auto" style="width: 550px;">
@@ -16,28 +16,28 @@
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
       {% else %}
           <li class="page-item">
-            <a class="page-link" href="index{{current_page-1}}.html" tabindex="-1" aria-disabled="true">Назад</a>
+            <a class="page-link" href="../pages/index{{current_page-1}}.html" tabindex="-1" aria-disabled="true">Назад</a>
       {% endif %}
-  {% for page in range(1,11) %}
+    {% for page in range(1,11) %}
     {% if current_page==page %}
           <li class="page-item active" aria-current="page">
-          <a class="page-link" href="index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
+          <a class="page-link" href="../pages/index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
     {% else %}
-          <li class="page-item"><a class="page-link" href="index{{page}}.html">{{page}}</a></li>
+          <li class="page-item"><a class="page-link" href="../pages/index{{page}}.html">{{page}}</a></li>
         
     {% endif %}
-  {% endfor %}
-    {% if current_page>10 %}
+    {% endfor %}
+      {% if current_page>10 %}
           <li class="page-item active" aria-current="page">
           <a class="page-link" href="index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
-    {% endif %}
-    {% if current_page==number_pages %}
+      {% endif %}
+      {% if current_page==number_pages %}
           <li class="page-item disabled">
             <a class="page-link" href="#">Вперёд</a>
-    {% else %}
+      {% else %}
           <li class="page-item">
             <a class="page-link" href="index{{current_page+1}}.html">Вперёд</a>
-    {% endif %}
+      {% endif %}
           </li>
         </ul>
       </nav>
@@ -45,7 +45,7 @@
     <div class="container">
       <div class="row">
         <div class="col">
-      {% for item_1 in itms_1 %}
+      {% for item_1 in items_1 %}
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
@@ -67,7 +67,7 @@
       {% endfor %} 
         </div>
         <div class="col">
-      {% for item_2 in itms_2 %}
+      {% for item_2 in items_2 %}
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
