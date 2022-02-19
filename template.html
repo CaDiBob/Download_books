@@ -49,7 +49,7 @@
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="/{{item_1.img_src}}" class="card-img" alt="...">
+                <img src="../{{item_1.img_src|urlencode}}" class="card-img" alt="...">
                   </div>
                     <div class="col-md-8">
                   <div class="card-body">
@@ -59,7 +59,7 @@
                   <span class="badge badge-light">{{genre}}</span>
                 {% endfor %}
                   <p class = "card-text"></p>
-                  <a target="_blank" href="/{{item_1.book_path}}">Читать</a>
+                  <a target="_blank" href="../{{item_1.book_path|urlencode}}">Читать</a>
                 </div>
               </div>
             </div>
@@ -71,7 +71,7 @@
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="/{{item_2.img_src}}" class="card-img" alt="...">
+                <img src="../{{ item_2.img_src|urlencode }}" class="card-img" alt="...">
                   </div>
                     <div class="col-md-8">
                   <div class="card-body">
@@ -81,7 +81,7 @@
                   <span class="badge badge-light">{{genre}}</span>
                 {% endfor %}
                   <p class = "card-text"></p>
-                  <a target="_blank" href="/{{item_2.book_path}}">Читать</a>
+                  <a target="_blank" href="../{{item_2.book_path|urlencode}}">Читать</a>
                 </div>
               </div>
             </div>
