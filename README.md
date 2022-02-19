@@ -102,6 +102,8 @@ python download_books.py 50 60
 
 [Подробная инструкция по работе на GitHub Pages](https://medium.com/nuances-of-programming/%D0%BA%D0%B0%D0%BA-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C-%D0%B1%D0%B5%D1%81%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D1%8B%D0%B9-%D1%81%D0%B0%D0%B9%D1%82-%D0%BD%D0%B0-github-pages-e0f3c258ee22)
 
+[Пример размещенного на GitHub Pages сайта с книгами](https://cadibob.github.io/Download_books/pages/index1.html)
+
 Пример страницы
 
 ![](/example.png)
