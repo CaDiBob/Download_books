@@ -96,6 +96,30 @@ python download_books.py 50 60
 Создаст две папки `books` и `images` в корне скрипта, скачает книги с `id` от 50 до 60 в папку `books` и картинки к ним в папку `images`.
 
 
+## Скрипт render_website.
+
+Создает готовые web - страницы с книгами и  обложками к ним(если таковые имеются) по 20 книг на странице с работающей пагинацией и возможностью чтения книг. Можно запустить сайт локально будет доступен по адресу http//127.0.0.1:5500/pages/index1.html или разместить на [GitHub Pages](https://pages.github.com/). [Подробная инструкция по работе на GitHub Pages](https://medium.com/nuances-of-programming/%D0%BA%D0%B0%D0%BA-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C-%D0%B1%D0%B5%D1%81%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D1%8B%D0%B9-%D1%81%D0%B0%D0%B9%D1%82-%D0%BD%D0%B0-github-pages-e0f3c258ee22)
+
+Пример страницы
+
+![](/example.png)
+
+### Как запустить:
+ 
+#### Аргументы
+
+Принимает пользовательский путь для файла с данными(формат .json)
+
+```bash
+python render_website.py --json_path /home/user
+```
+
+или без аргумента
+
+```bash
+python render_website.py
+```
+
 ### Как установить
 
 Python3 должен быть уже установлен. 
