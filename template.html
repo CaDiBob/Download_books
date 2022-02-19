@@ -54,6 +54,9 @@
                   <div class="card-body">
                   <h5 class="card-title">{{item_1.title}}</h5>
                   <p class = "card-text">{{item_1.author}}</p>
+                {% for genre in item_1.genres %}
+                  <span class="badge badge-light">{{genre}}</span>
+                {% endfor %}
                   <p class = "card-text"></p>
                   <a target="_blank" href="/{{item_1.book_path}}">Читать</a>
                 </div>
@@ -73,6 +76,10 @@
                   <div class="card-body">
                   <h5 class="card-title">{{item_2.title}}</h5>
                   <p class = "card-text">{{item_2.author}}</p>
+                {% for genre in item_2.genres %}
+                  <span class="badge badge-light">{{genre}}</span>
+                {% endfor %}
+                  <p class = "card-text"></p>
                   <a target="_blank" href="/{{item_2.book_path}}">Читать</a>
                 </div>
               </div>
