@@ -11,7 +11,7 @@ __pycache__/
 .replit
 poetry.lock
 pyproject.toml
-index.html
+
 
 # C extensions
 *.so
