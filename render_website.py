@@ -10,8 +10,9 @@ from livereload import Server, shell
 
 def add_argument_parser():
     parser = argparse.ArgumentParser(
-        description='''Скрипт скачивает книги жанра "научная фантастика"
-        с сайта https://tululu.org в указанном диапозе страниц'''
+        description='''Скрипт публикует на локальном сервере
+        книги жанра "научная фантастика" скаченные
+        с сайта https://tululu.org'''
     )
     parser.add_argument(
         '--json_path',
