@@ -118,6 +118,12 @@ python download_books.py 50 60
 python render_website.py --json_path /home/user
 ```
 
+Также можно указать колличество книг в каждой колонке, по умолчанию 10(20 книг на страницу)
+
+```bash
+python render_website.py --column_size 20
+```
+
 или без аргумента
 
 ```bash
