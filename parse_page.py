@@ -11,11 +11,8 @@ def parse_book_page(soup):
     genres = [genre.text for genre in raw_genres]
     img_tag_url = soup.select_one('.bookimage img')['src']
     img_url = urljoin('http://tululu.org', img_tag_url)
-    txt_tag_url = soup.select_one('[href^="/txt.php?id="]')
-    if not txt_tag_url:
-        txt_url = 'http://tululu.org'
-    else:
-        txt_url = urljoin('http://tululu.org', txt_tag_url['href'])
+    txt_tag_url = soup.select_one('[href^="/txt.php?id="]')['href']
+    txt_url = urljoin('http://tululu.org', txt_tag_url)
     raw_comments = soup.select('.texts>.black')
     book_comments = [comments.text for comments in raw_comments]
     return {

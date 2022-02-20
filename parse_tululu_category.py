@@ -126,6 +126,8 @@ def main():
             items.append(book_items)
         except requests.HTTPError:
             continue
+        except TypeError:
+            continue
     save_to_json(items, json_filepath)
 
 if __name__ == '__main__':

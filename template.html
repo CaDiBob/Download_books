@@ -5,61 +5,90 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="../static/favicon.ico" type="image/png">
-    <link rel="stylesheet" href="../static/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/bootstrap.min.css" >
   </head>
   <body>
-    <div class="mx-auto" style="width: 550px;">
-      <nav aria-label="...">
-        <ul class="pagination">
-      {% if current_page==1 %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
+    <div>
+      <div>
+        <main class="col-md-15 col-xl-20 py-md-3 pl-md-15 bd-content">
+          <div class="mx-auto" style="width: 400px;">
+            <nav aria-label="...">
+              <ul class="pagination">
+            {% if current_page==1 %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
+            {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="../pages/index{{current_page-1}}.html" tabindex="-1" aria-disabled="true">Назад</a>
+            {% endif %}
+      {% if pages_number<11 %}
+          {% for page in range(1,6) %}
+          {% if current_page==page %}
+                <li class="page-item active" aria-current="page">
+                <a class="page-link" href="../pages/index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
+          {% else %}
+                <li class="page-item"><a class="page-link" href="../pages/index{{page}}.html">{{page}}</a></li>
+              
+          {% endif %}
+          {% endfor %}
+            {% if current_page>5 %}
+                <li class="page-item active" aria-current="page">
+                <a class="page-link" href="index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
+            {% endif %}
+            {% if current_page==pages_number %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#">Вперёд</a>
+            {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="index{{current_page+1}}.html">Вперёд</a>
+            {% endif %}
       {% else %}
-          <li class="page-item">
-            <a class="page-link" href="../pages/index{{current_page-1}}.html" tabindex="-1" aria-disabled="true">Назад</a>
+          {% for page in range(1,11) %}
+          {% if current_page==page %}
+                <li class="page-item active" aria-current="page">
+                <a class="page-link" href="../pages/index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
+          {% else %}
+                <li class="page-item"><a class="page-link" href="../pages/index{{page}}.html">{{page}}</a></li>
+              
+          {% endif %}
+          {% endfor %}
+            {% if current_page>10 %}
+                <li class="page-item active" aria-current="page">
+                <a class="page-link" href="index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
+            {% endif %}
+            {% if current_page==pages_number %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#">Вперёд</a>
+            {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="index{{current_page+1}}.html">Вперёд</a>
+            {% endif %}
       {% endif %}
-    {% for page in range(1,11) %}
-    {% if current_page==page %}
-          <li class="page-item active" aria-current="page">
-          <a class="page-link" href="../pages/index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
-    {% else %}
-          <li class="page-item"><a class="page-link" href="../pages/index{{page}}.html">{{page}}</a></li>
-        
-    {% endif %}
-    {% endfor %}
-      {% if current_page>10 %}
-          <li class="page-item active" aria-current="page">
-          <a class="page-link" href="index{{current_page}}.html">{{current_page}}<span class="sr-only">(current)</span></a></li>
-      {% endif %}
-      {% if current_page==number_pages %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#">Вперёд</a>
-      {% else %}
-          <li class="page-item">
-            <a class="page-link" href="index{{current_page+1}}.html">Вперёд</a>
-      {% endif %}
-          </li>
-        </ul>
-      </nav>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </main>
+      </div> 
     </div>
     <div class="container">
       <div class="row">
         <div class="col">
-      {% for item_1 in items_1 %}
+      {% for book_1 in books_group_1 %}
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="../{{item_1.img_src|urlencode}}" class="card-img" alt="...">
+                <img src="../{{book_1.img_src|urlencode}}" class="card-img" alt="image">
                   </div>
                     <div class="col-md-8">
                   <div class="card-body">
-                  <h5 class="card-title">{{item_1.title}}</h5>
-                  <p class = "card-text">{{item_1.author}}</p>
-                {% for genre in item_1.genres %}
+                  <h5 class="card-title">{{book_1.title}}</h5>
+                  <p class = "card-text">{{book_1.author}}</p>
+                {% for genre in book_1.genres %}
                   <span class="badge badge-light">{{genre}}</span>
                 {% endfor %}
                   <p class = "card-text"></p>
-                  <a target="_blank" href="../{{item_1.book_path|urlencode}}">Читать</a>
+                  <a target="_blank" href="../{{book_1.book_path|urlencode}}">Читать</a>
                 </div>
               </div>
             </div>
@@ -67,21 +96,21 @@
       {% endfor %} 
         </div>
         <div class="col">
-      {% for item_2 in items_2 %}
+      {% for book_2 in books_group_2 %}
           <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="../{{ item_2.img_src|urlencode }}" class="card-img" alt="...">
+                <img src="../{{ book_2.img_src|urlencode }}" class="card-img" alt="image">
                   </div>
                     <div class="col-md-8">
                   <div class="card-body">
-                  <h5 class="card-title">{{item_2.title}}</h5>
-                  <p class = "card-text">{{item_2.author}}</p>
-                {% for genre in item_2.genres %}
+                  <h5 class="card-title">{{book_2.title}}</h5>
+                  <p class = "card-text">{{book_2.author}}</p>
+                {% for genre in book_2.genres %}
                   <span class="badge badge-light">{{genre}}</span>
                 {% endfor %}
                   <p class = "card-text"></p>
-                  <a target="_blank" href="../{{item_2.book_path|urlencode}}">Читать</a>
+                  <a target="_blank" href="../{{book_2.book_path|urlencode}}">Читать</a>
                 </div>
               </div>
             </div>
